@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.android.popcorn.MovieDetailsActivity">
+
+    <android.support.constraint.Guideline
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gl_body_header"
+        app:layout_constraintGuide_percent="0.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+    <android.support.constraint.Guideline
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gl_body_overview"
+        app:layout_constraintGuide_percent="0.3"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="154dp"
+        tools:layout_editor_absoluteX="0dp" />
+    <android.support.constraint.Guideline
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gl_body_end"
+        app:layout_constraintGuide_percent="1.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="511dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/gl_body_overview"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:id="@+id/constraintLayout"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.0"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="81dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7"
+            tools:layout_editor_absoluteX="269dp"
+            tools:layout_editor_absoluteY="81dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="1.0"
+            tools:layout_editor_absoluteX="384dp"
+            tools:layout_editor_absoluteY="81dp" />
+
+        <LinearLayout
+            android:gravity="top"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_text"
+            app:layout_constraintRight_toLeftOf="@+id/gl_image"
+            tools:layout_editor_absoluteY="567dp">
+
+            <TextView
+                android:id="@+id/tv_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/bigText" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/release_date"
+                    android:textSize="@dimen/normalText" />
+
+                <TextView
+                    android:id="@+id/tv_release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normalText" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rating"
+                    android:textSize="@dimen/normalText" />
+
+                <TextView
+                    android:id="@+id/tv_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normalText" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitStart"
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/imageSize"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_image"
+            app:layout_constraintRight_toLeftOf="@+id/gl_end"
+            tools:layout_editor_absoluteY="567dp"
+            android:contentDescription="@string/movie_thumbnail" />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        app:layout_constraintLeft_toRightOf="parent"
+        android:paddingTop="8dp"
+        android:gravity="top"
+        android:id="@+id/tv_overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/normalText"
+        tools:layout_editor_absoluteX="0dp"
+        app:layout_constraintTop_toTopOf="@+id/gl_body_overview"
+        android:layout_marginTop="0dp"
+
+        android:layout_marginBottom="8dp" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Popcorn</string>
+    <string name="load_movies_error">Could not load the latest Movies</string>
+    <string name="action_top">TOP</string>
+    <string name="action_popular">POPULAR</string>
+    <string name="release_date">Release date: </string>
+    <string name="rating">Rating: </string>
+    <string name="movie_thumbnail">Movie Thumbnail</string>
+</resources>
