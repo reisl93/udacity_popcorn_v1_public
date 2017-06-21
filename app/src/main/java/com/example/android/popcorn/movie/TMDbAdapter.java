@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.example.android.popcorn.R;
 import com.example.android.popcorn.data.TMDbMovie;
-import com.example.android.popcorn.data.TMDbMovies;
 import com.squareup.picasso.Picasso;
 
 import javax.annotation.Nullable;
@@ -76,7 +75,7 @@ public class TMDbAdapter extends RecyclerView.Adapter<TMDbAdapter.MoviesViewHold
             Log.d(TAG, "loading image for itemIndex " + itemIndex);
             final String posterPath;
             if (tmDbMovies != null) {
-                posterPath = tmDbMovies[itemIndex].getPoster_path();
+                posterPath = tmDbMovies[itemIndex].getPosterPath();
                 Uri imageUri = getTMDbImageUri(posterPath);
                 Log.d(TAG, "loading image " + imageUri);
                 Picasso.with(mContext).load(imageUri).into(mPoster);

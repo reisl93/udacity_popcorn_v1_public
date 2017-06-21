@@ -4,30 +4,37 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("unused") //allowed since GSON uses it
 public class TMDbMovie implements Parcelable {
 
     @Nullable
+    @SerializedName("title")
     private String title;
     private int id;
     @Nullable
-    private String poster_path;
+    @SerializedName("poster_path")
+    private String posterPath;
     @Nullable
     private String overview;
     @Nullable
-    private String original_title;
-    private double vote_average;
+    @SerializedName("original_title")
+    private String originalTitle;
+    @SerializedName("vote_average")
+    private double voteAverage;
     @Nullable
-    private String release_date;
+    @SerializedName("release_date")
+    private String releaseDate;
 
     protected TMDbMovie(Parcel in) {
         title = in.readString();
         id = in.readInt();
-        poster_path = in.readString();
+        posterPath = in.readString();
         overview = in.readString();
-        original_title = in.readString();
-        vote_average = in.readDouble();
-        release_date = in.readString();
+        originalTitle = in.readString();
+        voteAverage = in.readDouble();
+        releaseDate = in.readString();
     }
 
     public static final Creator<TMDbMovie> CREATOR = new Creator<TMDbMovie>() {
@@ -46,11 +53,11 @@ public class TMDbMovie implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeInt(id);
-        dest.writeString(poster_path);
+        dest.writeString(posterPath);
         dest.writeString(overview);
-        dest.writeString(original_title);
-        dest.writeDouble(vote_average);
-        dest.writeString(release_date);
+        dest.writeString(originalTitle);
+        dest.writeDouble(voteAverage);
+        dest.writeString(releaseDate);
     }
 
     @Override
@@ -59,12 +66,13 @@ public class TMDbMovie implements Parcelable {
     }
 
     @Nullable
-    public String getPoster_path() {
-        return poster_path;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(@Nullable final String poster_path) {
-        this.poster_path = poster_path;
+    @SerializedName("poster_path")
+    public void setPosterPath(@Nullable final String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public int getId() {
@@ -83,13 +91,15 @@ public class TMDbMovie implements Parcelable {
     public void setTitle(@Nullable final String title) {
         this.title = title;
     }
+
     @Nullable
-    public String getOriginal_title() {
-        return original_title;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public void setOriginal_title(@Nullable final String original_title) {
-        this.original_title = original_title;
+    @SerializedName("original_title")
+    public void setOriginalTitle(@Nullable final String originalTitle) {
+        this.originalTitle = originalTitle;
     }
     @Nullable
     public String getOverview() {
@@ -101,19 +111,21 @@ public class TMDbMovie implements Parcelable {
     }
 
     @Nullable
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(@Nullable String release_date) {
-        this.release_date = release_date;
+    @SerializedName("release_date")
+    public void setReleaseDate(@Nullable String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public double getVote_average() {
-        return vote_average;
+    public double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setVote_average(double vote_average) {
-        this.vote_average = vote_average;
+    @SerializedName("vote_average")
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 }

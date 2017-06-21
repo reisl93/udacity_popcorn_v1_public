@@ -1,13 +1,15 @@
 package com.example.android.popcorn.data;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Rupert on 20.06.2017.
  */
-
 @SuppressWarnings("unused") // used for GSON
 public class TMDbMovies {
     //actually we don't use this count, for simplicity
-    private int total_results;
+    @SerializedName("total_results")
+    private int totalResults;
     private TMDbMovie[] results;
 
     public TMDbMovie[] getResults() {
@@ -18,11 +20,12 @@ public class TMDbMovies {
         this.results = results;
     }
 
-    public int getTotal_results() {
-        return total_results;
+    public int getTotalResults() {
+        return totalResults;
     }
 
-    public void setTotal_results(int total_results) {
-        this.total_results = total_results;
+    @SerializedName("total_results")
+    public void setTotalResults(int totalResults) {
+        this.totalResults = totalResults;
     }
 }

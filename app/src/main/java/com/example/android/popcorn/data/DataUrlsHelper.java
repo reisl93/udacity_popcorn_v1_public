@@ -3,6 +3,8 @@ package com.example.android.popcorn.data;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.android.popcorn.BuildConfig;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -43,7 +45,7 @@ public class DataUrlsHelper {
                 Log.e(TAG, msg);
                 throw new IllegalArgumentException(msg);
         }
-        String apiKey = ApiKey.API_KEY;
+        String apiKey = BuildConfig.THE_MOVIE_DB_API_TOKEN;
         uriBuilder.appendQueryParameter(tmdbApiApiKey, apiKey);
 
         try {

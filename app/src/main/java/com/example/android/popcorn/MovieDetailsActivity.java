@@ -47,12 +47,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private void showDetails() {
         if (tmDbMovie != null) {
-            mTitle.setText(tmDbMovie.getOriginal_title());
-            mRating.setText(String.valueOf(tmDbMovie.getVote_average()));
-            mReleaseDate.setText(tmDbMovie.getRelease_date());
+            mTitle.setText(tmDbMovie.getOriginalTitle());
+            mRating.setText(String.valueOf(tmDbMovie.getVoteAverage()));
+            mReleaseDate.setText(tmDbMovie.getReleaseDate());
             mOverview.setText(tmDbMovie.getOverview());
 
-            Uri imageUri = getTMDbImageUri(tmDbMovie.getPoster_path());
+            Uri imageUri = getTMDbImageUri(tmDbMovie.getPosterPath());
             Log.d(TAG, "loading image " + imageUri);
             Picasso.with(this).load(imageUri).into(mThumbnail);
         }

@@ -19,6 +19,9 @@ android {
     }
     productFlavors {
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'THE_MOVIE_DB_API_TOKEN', theMovieDBApiToken
+    }
 }
 
 repositories {
