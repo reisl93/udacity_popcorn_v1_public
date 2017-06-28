@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/forecast_detail_vertical_padding"
-    android:layout_marginBottom="@dimen/forecast_detail_vertical_padding"
+    android:layout_marginTop="@dimen/movie_detail_vertical_padding"
+    android:layout_marginBottom="@dimen/movie_detail_vertical_padding"
     >
 
     <TextView

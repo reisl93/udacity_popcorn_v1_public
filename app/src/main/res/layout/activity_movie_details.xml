@@ -18,7 +18,7 @@
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:background="@color/colorPrimary"
-                android:contentDescription=""
+                android:contentDescription="@string/noDescription"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -62,25 +62,19 @@
 
             <ImageView
                 android:id="@+id/iv_trailer_spacer"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginEnd="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginStart="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginTop="@dimen/movie_details_space"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_overview"
-                app:srcCompat="@color/primary_text" />
+                app:srcCompat="@color/primary_text"
+                style="@style/SmallSeparator"
+                android:contentDescription="@string/noDescription" />
 
             <TextView
                 android:id="@+id/tv_trailer_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginStart="@dimen/movie_detail_horizontal_padding"
                 android:text="@string/trailers"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_trailer_spacer" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_trailer_spacer"
+                style="@style/DetailsLabel" />
 
             <include
                 android:id="@+id/i_detail_trailers"
@@ -93,25 +87,19 @@
 
             <ImageView
                 android:id="@+id/iv_reviews_spacer"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginEnd="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginStart="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginTop="@dimen/movie_details_space"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/i_detail_trailers"
-                app:srcCompat="@color/primary_text" />
+                app:srcCompat="@color/primary_text"
+                style="@style/SmallSeparator"
+                android:contentDescription="@string/noDescription" />
 
             <TextView
                 android:id="@+id/tv_review_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/movie_detail_horizontal_padding"
-                android:layout_marginStart="@dimen/movie_detail_horizontal_padding"
                 android:text="@string/reviews"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_reviews_spacer" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_reviews_spacer"
+                style="@style/DetailsLabel" />
 
             <include
                 android:id="@+id/i_detail_reviews"
