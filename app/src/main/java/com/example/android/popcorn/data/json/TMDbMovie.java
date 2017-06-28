@@ -1,4 +1,4 @@
-package com.example.android.popcorn.data;
+package com.example.android.popcorn.data.json;
 
 import android.os.Parcel;
 import android.os.Parcelable;

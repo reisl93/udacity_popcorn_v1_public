@@ -1,6 +1,7 @@
 package com.example.android.popcorn.movie;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,24 +11,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.popcorn.R;
-import com.example.android.popcorn.data.TMDbMovie;
 import com.squareup.picasso.Picasso;
 
 import javax.annotation.Nullable;
 
-import static com.example.android.popcorn.data.DataUrlsHelper.getTMDbImageUri;
+import static com.example.android.popcorn.data.network.DataUrlsHelper.getTMDbImageUri;
 
-/**
- * Created by Rupert on 20.06.2017.
- */
-public class TMDbAdapter extends RecyclerView.Adapter<TMDbAdapter.MoviesViewHolder> {
-    private final static String TAG = TMDbAdapter.class.getSimpleName();
+public class TMDbMoviesAdapter extends RecyclerView.Adapter<TMDbMoviesAdapter.MoviesViewHolder> {
+    private final static String TAG = TMDbMoviesAdapter.class.getSimpleName();
 
     @Nullable
-    private TMDbMovie[] tmDbMovies = null;
+    private Cursor tmDbMoviesCursor = null;
     private final MovieClickedListener mClickOnListener;
 
-    public TMDbAdapter(final MovieClickedListener clickHandler) {
+    public TMDbMoviesAdapter(final MovieClickedListener clickHandler) {
         mClickOnListener = clickHandler;
     }
 
@@ -48,13 +45,13 @@ public class TMDbAdapter extends RecyclerView.Adapter<TMDbAdapter.MoviesViewHold
 
     @Override
     public int getItemCount() {
-        if (null == tmDbMovies) return 0;
-        return tmDbMovies.length;
+        if (null == tmDbMoviesCursor) return 0;
+        return tmDbMoviesCursor.getCount();
     }
 
-    public void setMovies(final TMDbMovie[] tmDbMovies) {
+    public void swapCursor(final Cursor tmDbMovies) {
         Log.d(TAG, "Refreshing movies data");
-        this.tmDbMovies = tmDbMovies;
+        this.tmDbMoviesCursor = tmDbMovies;
         notifyDataSetChanged();
     }
 
@@ -74,20 +71,19 @@ public class TMDbAdapter extends RecyclerView.Adapter<TMDbAdapter.MoviesViewHold
         public void bind(final int itemIndex) {
             Log.d(TAG, "loading image for itemIndex " + itemIndex);
             final String posterPath;
-            if (tmDbMovies != null) {
-                posterPath = tmDbMovies[itemIndex].getPosterPath();
+            if (tmDbMoviesCursor != null && tmDbMoviesCursor.moveToPosition(itemIndex)) {
+                posterPath = tmDbMoviesCursor.getString(MovieLoader.INDEX_MOVIE_POSTER_PATH);
                 Uri imageUri = getTMDbImageUri(posterPath);
                 Log.d(TAG, "loading image " + imageUri);
                 Picasso.with(mContext).load(imageUri).into(mPoster);
             }
-
         }
 
         @Override
         public void onClick(View v) {
             final int clickedPosition = getAdapterPosition();
-            if (tmDbMovies != null) {
-                mClickOnListener.onMovieClicked(tmDbMovies[clickedPosition]);
+            if (tmDbMoviesCursor != null && tmDbMoviesCursor.moveToPosition(clickedPosition)) {
+                mClickOnListener.onMovieClicked(tmDbMoviesCursor.getInt(MovieLoader.INDEX_MOVIE_ID));
             }
         }
     }

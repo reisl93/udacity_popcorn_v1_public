@@ -1,4 +1,4 @@
-package com.example.android.popcorn.data;
+package com.example.android.popcorn.data.json;
 
 import com.google.gson.annotations.SerializedName;
 

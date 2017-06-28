@@ -9,11 +9,11 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.popcorn.data.TMDbMovie;
+import com.example.android.popcorn.data.json.TMDbMovie;
 import com.example.android.popcorn.utils.MovieIntents;
 import com.squareup.picasso.Picasso;
 
-import static com.example.android.popcorn.data.DataUrlsHelper.getTMDbImageUri;
+import static com.example.android.popcorn.data.network.DataUrlsHelper.getTMDbImageUri;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private final static String TAG = MovieDetailsActivity.class.getSimpleName();

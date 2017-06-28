@@ -27,5 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MoviePostersActivity" />
         </activity>
+
+
+        <service
+            android:name=".data.sync.PopcornSyncIntentService"
+            android:exported="false" />
     </application>
 </manifest>
