@@ -1,4 +1,4 @@
-package com.example.android.popcorn.data.network;
+package com.example.android.popcorn.utils;
 
 import android.net.Uri;
 import android.util.Log;
@@ -51,7 +51,7 @@ public class DataUrlsHelper {
                 uriBuilder.appendEncodedPath(tmdbApiTopRated);
                 break;
             case FAVORITE:
-                // ignore
+                Log.w(TAG, "Someone wanted to query the FAVORITE sorting from the TMDB api... shouldn't happen!");
                 break;
             default:
                 String msg = "Missing branch. Someone appended " + TMDbSorting.class.getSimpleName() + " without editing this switch branch.";
@@ -104,5 +104,4 @@ public class DataUrlsHelper {
         }
         return null;
     }
-
 }

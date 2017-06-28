@@ -1,10 +1,9 @@
-package com.example.android.popcorn.movie;
+package com.example.android.popcorn.activities.posters;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -13,7 +12,7 @@ import com.example.android.popcorn.data.PopcornContract;
 import com.example.android.popcorn.data.json.TMDbSorting;
 
 public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Cursor>{
-    public static final int ID_MOVIES_LOADER = 123222;
+    public static final int ID_MOVIES_LOADER = 8769874;
     private final Context mContext;
 
 
@@ -48,7 +47,6 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Curso
         switch (id) {
             case ID_MOVIES_LOADER:
                 Uri moviesQueryUri = PopcornContract.MoviesEntry.CONTENT_URI.buildUpon()
-                        .appendEncodedPath("/")
                         .appendEncodedPath(mSorting.toString())
                         .build();
                 return new CursorLoader(mContext, moviesQueryUri, MAIN_MOVIES_PROJECTION, null, null, null);

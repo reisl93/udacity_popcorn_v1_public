@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">Popcorn</string>
-    <string name="load_movies_error">Could not load the latest Movies</string>
+
+    <!-- MOVIE POSTER ACTIVITY RESOURCES -->
     <string name="action_top">TOP</string>
     <string name="action_popular">POPULAR</string>
+    <string name="action_favorite">FAVORITE</string>
+
+    <!-- DETAILS ACTION RESOURCES -->
     <string name="release_date">Release date: </string>
     <string name="rating">Rating: </string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
     <string name="trailers">Trailers:</string>
     <string name="movie_detail_mark_as_favorite">mark as favorite</string>
-    <string name="action_favorite">FAVORITE</string>
+
+
+    <string name="content_authority">com.example.android.popcorn</string>
+    <string name="play_button">Play button</string>
+    <string name="reviews">Reviews:</string>
+
 </resources>

@@ -12,8 +12,6 @@
         android:id="@+id/iv_thumbnail"
         android:layout_width="100dp"
         android:layout_height="200dp"
-        android:layout_marginLeft="@dimen/movie_detail_startMargin"
-        android:layout_marginStart="@dimen/movie_detail_startMargin"
         android:layout_marginTop="@dimen/movie_details_space"
         android:contentDescription="@string/movie_thumbnail"
         android:scaleType="fitStart" />
@@ -62,5 +60,6 @@
         android:text="@string/movie_detail_mark_as_favorite"
         android:textColor="@color/detail_accent_label"
         app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rating" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rating"
+        android:onClick="addMovieToFavorites"/>
 </android.support.constraint.ConstraintLayout>

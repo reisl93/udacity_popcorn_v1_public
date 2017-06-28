@@ -35,7 +35,7 @@ public class PopcornContract {
                 .appendPath(PATH_TRAILERS)
                 .build();
 
-        public static final String TABLE_NAME = "movies";
+        public static final String TABLE_NAME = "trailers";
 
         public static final String VIDEO_KEY = "video_key";
         public static final String WEBSITE = "website";

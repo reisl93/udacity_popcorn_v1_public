@@ -3,11 +3,9 @@ package com.example.android.popcorn.data.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 import com.example.android.popcorn.data.PopcornContract;
-import com.example.android.popcorn.data.PopcornDbHelper;
 import com.example.android.popcorn.data.json.TMDbMovie;
 import com.example.android.popcorn.data.json.TMDbMovies;
 import com.example.android.popcorn.data.json.TMDbReview;
@@ -15,7 +13,7 @@ import com.example.android.popcorn.data.json.TMDbReviews;
 import com.example.android.popcorn.data.json.TMDbSorting;
 import com.example.android.popcorn.data.json.TMDbTrailer;
 import com.example.android.popcorn.data.json.TMDbTrailers;
-import com.example.android.popcorn.data.network.DataUrlsHelper;
+import com.example.android.popcorn.utils.DataUrlsHelper;
 import com.example.android.popcorn.utils.NetworkUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
@@ -66,41 +64,24 @@ public class PopcornSyncTask {
         }
     }
 
-    synchronized public static void syncTrailers(Context context) {
+    synchronized public static void syncTrailer(Context context, final int id) {
 
-        Cursor allIds = null;
-        final Map<Integer, TMDbTrailer[]> trailers;
-        try {
-            allIds = new PopcornDbHelper(context).getReadableDatabase().query(
-                    PopcornContract.TrailersEntry.TABLE_NAME,
-                    new String[]{PopcornContract.TrailersEntry._ID},
-                    null, null, null, null, null);
+        final URL trailerRequestURL = DataUrlsHelper.getTMDbTrailerUrl(id);
+        Map<Integer, TMDbTrailer[]> trailers = new HashMap<>();
+        if (trailerRequestURL != null) {
+            try {
+                final String jsonTrailerResponse = NetworkUtils
+                        .getResponseFromHttpUrl(trailerRequestURL);
 
-            trailers = new HashMap<>();
-
-            while (allIds.moveToNext()) {
-                final int id = allIds.getInt(0);
-                final URL trailerRequestURL = DataUrlsHelper.getTMDbTrailerUrl(id);
-                if (trailerRequestURL != null) {
-                    try {
-                        final String jsonMovieResponse = NetworkUtils
-                                .getResponseFromHttpUrl(trailerRequestURL);
-
-                        try {
-                            trailers.put(id, new Gson().fromJson(jsonMovieResponse, TMDbTrailers.class).getTrailers());
-                        } catch (JsonSyntaxException e) {
-                            Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbTrailers.class.getSimpleName() + " has changed. " +
-                                    "Returned JSON: " + jsonMovieResponse);
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    trailers.put(id, new Gson().fromJson(jsonTrailerResponse, TMDbTrailers.class).getTrailers());
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbTrailers.class.getSimpleName() + " has changed. " +
+                            "Returned JSON: " + jsonTrailerResponse);
+                    e.printStackTrace();
                 }
-            }
-        } finally {
-            if (allIds != null){
-                allIds.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -109,56 +90,39 @@ public class PopcornSyncTask {
         if (trailersValues.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();
 
-            popcornContentResolver.delete(PopcornContract.TrailersEntry.CONTENT_URI, null, null);
+            popcornContentResolver.delete(PopcornContract.TrailersEntry.CONTENT_URI, PopcornContract.TrailersEntry._ID + "=?", new String[]{String.valueOf(id)});
             popcornContentResolver.bulkInsert(PopcornContract.TrailersEntry.CONTENT_URI, trailersValues);
         }
     }
 
-    synchronized public static void syncReviews(Context context) {
+    synchronized public static void syncReview(Context context, final int id) {
 
-        Cursor allIds = null;
-        final Map<Integer, TMDbReview[]> reviews;
-        try {
-            allIds = new PopcornDbHelper(context).getReadableDatabase().query(
-                    PopcornContract.TrailersEntry.TABLE_NAME,
-                    new String[]{PopcornContract.TrailersEntry._ID},
-                    null, null, null, null, null);
+        Map<Integer, TMDbReview[]> reviews = new HashMap<>();
+        final URL trailerRequestURL = DataUrlsHelper.getTMDbReviewsUrl(id);
+        if (trailerRequestURL != null) {
+            try {
+                final String jsonReviewResponse = NetworkUtils
+                        .getResponseFromHttpUrl(trailerRequestURL);
 
-            reviews = new HashMap<>();
-
-            while (allIds.moveToNext()) {
-                final int id = allIds.getInt(0);
-                final URL trailerRequestURL = DataUrlsHelper.getTMDbReviewsUrl(id);
-                if (trailerRequestURL != null) {
-                    try {
-                        final String jsonMovieResponse = NetworkUtils
-                                .getResponseFromHttpUrl(trailerRequestURL);
-
-                        try {
-                            reviews.put(id, new Gson().fromJson(jsonMovieResponse, TMDbReviews.class).getReviews());
-                        } catch (JsonSyntaxException e) {
-                            Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbReviews.class.getSimpleName() + " has changed. " +
-                                    "Returned JSON: " + jsonMovieResponse);
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    reviews.put(id, new Gson().fromJson(jsonReviewResponse, TMDbReviews.class).getReviews());
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbReviews.class.getSimpleName() + " has changed. " +
+                            "Returned JSON: " + jsonReviewResponse);
+                    e.printStackTrace();
                 }
-            }
-        } finally {
-            if (allIds != null){
-                allIds.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        ContentValues[] trailersValues = PopcornSyncUtils.getReviewsContentValues(reviews);
+        ContentValues[] reviewValues = PopcornSyncUtils.getReviewsContentValues(reviews);
 
-        if (trailersValues.length > 0) {
+        if (reviewValues.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();
 
-            popcornContentResolver.delete(PopcornContract.ReviewsEntry.CONTENT_URI, null, null);
-            popcornContentResolver.bulkInsert(PopcornContract.ReviewsEntry.CONTENT_URI, trailersValues);
+            popcornContentResolver.delete(PopcornContract.ReviewsEntry.CONTENT_URI, PopcornContract.ReviewsEntry._ID + "=?", new String[]{String.valueOf(id)});
+            popcornContentResolver.bulkInsert(PopcornContract.ReviewsEntry.CONTENT_URI, reviewValues);
         }
     }
 

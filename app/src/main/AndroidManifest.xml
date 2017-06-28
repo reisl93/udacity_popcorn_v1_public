@@ -28,6 +28,10 @@
                 android:value=".MoviePostersActivity" />
         </activity>
 
+        <provider
+            android:name=".data.PopcornProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false"/>
 
         <service
             android:name=".data.sync.PopcornSyncIntentService"

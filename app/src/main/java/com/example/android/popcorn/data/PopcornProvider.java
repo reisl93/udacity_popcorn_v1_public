@@ -14,6 +14,7 @@ public class PopcornProvider extends ContentProvider {
 
     public static final int CODE_MOVIES = 100;
     public static final int CODE_MOVIES_WITH_ID = 101;
+    public static final int CODE_MOVIES_WITH_SORTING = 102;
     public static final int CODE_TRAILERS = 200;
     public static final int CODE_TRAILERS_WITH_ID = 201;
     public static final int CODE_REVIEWS = 300;
@@ -29,6 +30,7 @@ public class PopcornProvider extends ContentProvider {
 
         matcher.addURI(authority, PopcornContract.PATH_MOVIES, CODE_MOVIES);
         matcher.addURI(authority, PopcornContract.PATH_MOVIES + "/#", CODE_MOVIES_WITH_ID);
+        matcher.addURI(authority, PopcornContract.PATH_MOVIES + "/*", CODE_MOVIES_WITH_SORTING);
         matcher.addURI(authority, PopcornContract.PATH_TRAILERS, CODE_TRAILERS);
         matcher.addURI(authority, PopcornContract.PATH_TRAILERS + "/#", CODE_TRAILERS_WITH_ID);
         matcher.addURI(authority, PopcornContract.PATH_REVIEWS, CODE_REVIEWS);
@@ -47,7 +49,6 @@ public class PopcornProvider extends ContentProvider {
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        int rowsInserted = 0;
         switch (sUriMatcher.match(uri)) {
             case CODE_MOVIES:
                 return bulkInsertToTable(PopcornContract.MoviesEntry.TABLE_NAME, values, db, uri);
@@ -67,12 +68,25 @@ public class PopcornProvider extends ContentProvider {
         Cursor cursor;
         switch (sUriMatcher.match(uri)) {
             case CODE_MOVIES_WITH_ID: {
-                final String normalizedUtcDateString = uri.getLastPathSegment();
-                final String[] selectionArguments = new String[]{normalizedUtcDateString};
+                final String id = uri.getLastPathSegment();
+                final String[] selectionArguments = new String[]{id};
                 cursor = mDbHelper.getReadableDatabase().query(
                         PopcornContract.MoviesEntry.TABLE_NAME,
                         projection,
                         PopcornContract.MoviesEntry._ID + " = ? ",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case CODE_MOVIES_WITH_SORTING: {
+                final String sorting = uri.getLastPathSegment();
+                final String[] selectionArguments = new String[]{sorting};
+                cursor = mDbHelper.getReadableDatabase().query(
+                        PopcornContract.MoviesEntry.TABLE_NAME,
+                        projection,
+                        PopcornContract.MoviesEntry.SORTING + " = ? ",
                         selectionArguments,
                         null,
                         null,
@@ -93,8 +107,8 @@ public class PopcornProvider extends ContentProvider {
             }
 
             case CODE_TRAILERS_WITH_ID: {
-                final String normalizedUtcDateString = uri.getLastPathSegment();
-                final String[] selectionArguments = new String[]{normalizedUtcDateString};
+                final String id = uri.getLastPathSegment();
+                final String[] selectionArguments = new String[]{id};
                 cursor = mDbHelper.getReadableDatabase().query(
                         PopcornContract.TrailersEntry.TABLE_NAME,
                         projection,
@@ -197,8 +211,28 @@ public class PopcornProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        throw new RuntimeException(
-                "We are not implementing insert in Popcorn. Use bulkInsert instead");
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        final long insertedRows;
+        switch (sUriMatcher.match(uri)) {
+            case CODE_MOVIES:
+                insertedRows = db.insert(PopcornContract.MoviesEntry.TABLE_NAME, null, values);
+                break;
+            case CODE_TRAILERS:
+                insertedRows = db.insert(PopcornContract.TrailersEntry.TABLE_NAME, null, values);
+                break;
+            case CODE_REVIEWS:
+                insertedRows = db.insert(PopcornContract.ReviewsEntry.TABLE_NAME, null, values);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (insertedRows > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return uri;
+
     }
 
     @Override

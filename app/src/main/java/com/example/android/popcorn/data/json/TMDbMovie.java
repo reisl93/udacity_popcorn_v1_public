@@ -27,6 +27,16 @@ public class TMDbMovie implements Parcelable {
     @SerializedName("release_date")
     private String releaseDate;
 
+    public TMDbMovie(@Nullable String title, int id, @Nullable String posterPath, @Nullable String overview, @Nullable String originalTitle, double voteAverage, @Nullable String releaseDate) {
+        this.title = title;
+        this.id = id;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.originalTitle = originalTitle;
+        this.voteAverage = voteAverage;
+        this.releaseDate = releaseDate;
+    }
+
     protected TMDbMovie(Parcel in) {
         title = in.readString();
         id = in.readInt();
@@ -101,6 +111,7 @@ public class TMDbMovie implements Parcelable {
     public void setOriginalTitle(@Nullable final String originalTitle) {
         this.originalTitle = originalTitle;
     }
+
     @Nullable
     public String getOverview() {
         return overview;

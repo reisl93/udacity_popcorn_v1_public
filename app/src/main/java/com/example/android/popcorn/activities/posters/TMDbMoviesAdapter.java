@@ -1,4 +1,4 @@
-package com.example.android.popcorn.movie;
+package com.example.android.popcorn.activities.posters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import javax.annotation.Nullable;
 
-import static com.example.android.popcorn.data.network.DataUrlsHelper.getTMDbImageUri;
+import static com.example.android.popcorn.utils.DataUrlsHelper.getTMDbImageUri;
 
 public class TMDbMoviesAdapter extends RecyclerView.Adapter<TMDbMoviesAdapter.MoviesViewHolder> {
     private final static String TAG = TMDbMoviesAdapter.class.getSimpleName();
@@ -56,19 +56,19 @@ public class TMDbMoviesAdapter extends RecyclerView.Adapter<TMDbMoviesAdapter.Mo
     }
 
 
-    public class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final ImageView mPoster;
         private final Context mContext;
 
-        public MoviesViewHolder(View itemView) {
+        MoviesViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             mPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final int itemIndex) {
+        void bind(final int itemIndex) {
             Log.d(TAG, "loading image for itemIndex " + itemIndex);
             final String posterPath;
             if (tmDbMoviesCursor != null && tmDbMoviesCursor.moveToPosition(itemIndex)) {
@@ -83,7 +83,9 @@ public class TMDbMoviesAdapter extends RecyclerView.Adapter<TMDbMoviesAdapter.Mo
         public void onClick(View v) {
             final int clickedPosition = getAdapterPosition();
             if (tmDbMoviesCursor != null && tmDbMoviesCursor.moveToPosition(clickedPosition)) {
-                mClickOnListener.onMovieClicked(tmDbMoviesCursor.getInt(MovieLoader.INDEX_MOVIE_ID));
+                int movieId = tmDbMoviesCursor.getInt(MovieLoader.INDEX_MOVIE_ID);
+                Log.d(TAG, "clicked on movie id: " + movieId);
+                mClickOnListener.onMovieClicked(movieId);
             }
         }
     }

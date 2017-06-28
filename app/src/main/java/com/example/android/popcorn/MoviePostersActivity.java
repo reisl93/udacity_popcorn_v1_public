@@ -17,9 +17,9 @@ import android.widget.ProgressBar;
 
 import com.example.android.popcorn.data.json.TMDbSorting;
 import com.example.android.popcorn.data.sync.PopcornSyncInitializer;
-import com.example.android.popcorn.movie.MovieClickedListener;
-import com.example.android.popcorn.movie.MovieLoader;
-import com.example.android.popcorn.movie.TMDbMoviesAdapter;
+import com.example.android.popcorn.activities.posters.MovieClickedListener;
+import com.example.android.popcorn.activities.posters.MovieLoader;
+import com.example.android.popcorn.activities.posters.TMDbMoviesAdapter;
 
 import static com.example.android.popcorn.utils.MovieIntents.VIEW_MOVIE_DETAILS;
 
@@ -104,9 +104,7 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
 
     @Override
     public void onMovieClicked(final int id) {
-        Context context = this;
-        Class destinationClass = MovieDetailsActivity.class;
-        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
+        Intent intentToStartDetailActivity = new Intent(this, MovieDetailsActivity.class);
         intentToStartDetailActivity.putExtra(VIEW_MOVIE_DETAILS, id);
         startActivity(intentToStartDetailActivity);
     }

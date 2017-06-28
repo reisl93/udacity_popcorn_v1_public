@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class TMDbTrailer {
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("key")
     private String videoKey;
@@ -15,12 +15,12 @@ public class TMDbTrailer {
     @SerializedName("name")
     private String videoTitle;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     @SerializedName("id")
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
