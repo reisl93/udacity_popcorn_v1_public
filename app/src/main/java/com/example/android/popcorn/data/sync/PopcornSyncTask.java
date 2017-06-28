@@ -15,7 +15,6 @@ import com.example.android.popcorn.data.json.TMDbTrailer;
 import com.example.android.popcorn.data.json.TMDbTrailers;
 import com.example.android.popcorn.utils.DataUrlsHelper;
 import com.example.android.popcorn.utils.NetworkUtils;
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -27,54 +26,51 @@ public class PopcornSyncTask {
 
     private static final String TAG = PopcornSyncTask.class.getSimpleName();
 
-    synchronized public static void syncMovies(Context context) {
+    synchronized public static void syncMovies(Context context, TMDbSorting sorting) {
 
-        final Map<TMDbSorting, TMDbMovie[]> tmDbSortingMap = new HashMap<>();
+        TMDbMovie[] tmDbMovies = null;
 
-        for (final TMDbSorting sorting : ImmutableList.of(TMDbSorting.POPULAR, TMDbSorting.TOP_RATED)) {
-            final URL movieRequestURL = DataUrlsHelper.getTMDbRatingsUrl(sorting);
-            if (movieRequestURL != null) {
+        final URL movieRequestURL = DataUrlsHelper.getTMDbRatingsUrl(sorting);
+        if (movieRequestURL != null) {
+            try {
+                final String jsonMovieResponse = NetworkUtils
+                        .getResponseFromHttpUrl(movieRequestURL);
                 try {
-                    final String jsonMovieResponse = NetworkUtils
-                            .getResponseFromHttpUrl(movieRequestURL);
-
-                    try {
-                        tmDbSortingMap.put(sorting, new Gson().fromJson(jsonMovieResponse, TMDbMovies.class).getResults());
-                    } catch (JsonSyntaxException e) {
-                        Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbMovies.class.getSimpleName() + " has changed. " +
-                                "Returned JSON: " + jsonMovieResponse);
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
+                    tmDbMovies =  new Gson().fromJson(jsonMovieResponse, TMDbMovies.class).getResults();
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbMovies.class.getSimpleName() + " has changed. " +
+                            "Returned JSON: " + jsonMovieResponse);
                     e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        ContentValues[] movieValues = PopcornSyncUtils.getMoviesContentValues(tmDbSortingMap);
+        ContentValues[] movieValues = PopcornSyncUtils.getMoviesContentValues(sorting, tmDbMovies);
 
         if (movieValues.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();
             //delete all except his favorites
             popcornContentResolver.delete(
                     PopcornContract.MoviesEntry.CONTENT_URI,
-                    PopcornContract.MoviesEntry.SORTING + " IN (?, ?)",
-                    new String[]{TMDbSorting.TOP_RATED.toString(), TMDbSorting.POPULAR.toString()});
+                    PopcornContract.MoviesEntry.SORTING + " = ?",
+                    new String[]{sorting.toString()});
             popcornContentResolver.bulkInsert(PopcornContract.MoviesEntry.CONTENT_URI, movieValues);
         }
     }
 
-    synchronized public static void syncTrailer(Context context, final int id) {
+    synchronized public static void syncTrailers(Context context, final int id) {
 
         final URL trailerRequestURL = DataUrlsHelper.getTMDbTrailerUrl(id);
-        Map<Integer, TMDbTrailer[]> trailers = new HashMap<>();
+        TMDbTrailer[] trailers = null;
         if (trailerRequestURL != null) {
             try {
                 final String jsonTrailerResponse = NetworkUtils
                         .getResponseFromHttpUrl(trailerRequestURL);
 
                 try {
-                    trailers.put(id, new Gson().fromJson(jsonTrailerResponse, TMDbTrailers.class).getTrailers());
+                    trailers = new Gson().fromJson(jsonTrailerResponse, TMDbTrailers.class).getTrailers();
                 } catch (JsonSyntaxException e) {
                     Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbTrailers.class.getSimpleName() + " has changed. " +
                             "Returned JSON: " + jsonTrailerResponse);
@@ -85,7 +81,7 @@ public class PopcornSyncTask {
             }
         }
 
-        ContentValues[] trailersValues = PopcornSyncUtils.getTrailersContentValues(trailers);
+        ContentValues[] trailersValues = PopcornSyncUtils.getTrailersContentValues(id, trailers);
 
         if (trailersValues.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();
@@ -95,9 +91,9 @@ public class PopcornSyncTask {
         }
     }
 
-    synchronized public static void syncReview(Context context, final int id) {
+    synchronized public static void syncReviews(Context context, final int id) {
 
-        Map<Integer, TMDbReview[]> reviews = new HashMap<>();
+       TMDbReview[] reviews = null;
         final URL trailerRequestURL = DataUrlsHelper.getTMDbReviewsUrl(id);
         if (trailerRequestURL != null) {
             try {
@@ -105,7 +101,7 @@ public class PopcornSyncTask {
                         .getResponseFromHttpUrl(trailerRequestURL);
 
                 try {
-                    reviews.put(id, new Gson().fromJson(jsonReviewResponse, TMDbReviews.class).getReviews());
+                    reviews= new Gson().fromJson(jsonReviewResponse, TMDbReviews.class).getReviews();
                 } catch (JsonSyntaxException e) {
                     Log.e(TAG, "Either TMDb has changed its API, or the " + TMDbReviews.class.getSimpleName() + " has changed. " +
                             "Returned JSON: " + jsonReviewResponse);
@@ -116,7 +112,7 @@ public class PopcornSyncTask {
             }
         }
 
-        ContentValues[] reviewValues = PopcornSyncUtils.getReviewsContentValues(reviews);
+        ContentValues[] reviewValues = PopcornSyncUtils.getReviewsContentValues(id, reviews);
 
         if (reviewValues.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();

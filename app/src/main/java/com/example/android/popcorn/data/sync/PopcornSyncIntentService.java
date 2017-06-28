@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.android.popcorn.data.json.TMDbSorting;
+
 public class PopcornSyncIntentService extends IntentService{
     private static final String TAG = PopcornSyncIntentService.class.getSimpleName();
 
@@ -16,6 +18,7 @@ public class PopcornSyncIntentService extends IntentService{
     public static final String POPCORN_SYNC_REVIEW = "POPCORN_SYNC_REVIEW";
 
     public static final String POPCORN_SYNC_ID_KEY = "POPCORN_SYNC_ID_KEY";
+    public static final String POPCORN_SYNC_SORTING_KEY = "POPCORN_SYNC_SORTING_KEY";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -27,19 +30,25 @@ public class PopcornSyncIntentService extends IntentService{
             id = invalidId;
         }
 
+        TMDbSorting sorting;
+        if (intent.hasExtra(POPCORN_SYNC_SORTING_KEY)){
+            sorting = TMDbSorting.valueOf(intent.getStringExtra(POPCORN_SYNC_SORTING_KEY));
+        } else {
+            sorting = TMDbSorting.POPULAR;
+        }
 
         switch (intent.getAction()){
 
             case POPCORN_SYNC_REVIEW:
-                PopcornSyncTask.syncReview(this, id);
+                PopcornSyncTask.syncReviews(this, id);
                 break;
 
             case POPCORN_SYNC_TRAILER:
-                PopcornSyncTask.syncTrailer(this, id);
+                PopcornSyncTask.syncTrailers(this, id);
                 break;
 
             case POPCORN_SYNC_MOVIES:
-                PopcornSyncTask.syncMovies(this);
+                PopcornSyncTask.syncMovies(this, sorting);
                 break;
             default:
                 Log.w(TAG, "empty sync intent: " + intent.getAction());

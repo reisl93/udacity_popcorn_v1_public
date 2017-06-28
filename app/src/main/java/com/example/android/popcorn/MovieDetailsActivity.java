@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.example.android.popcorn.activities.details.MovieInFavoritesLoader;
 import com.example.android.popcorn.activities.details.MovieLoader;
 import com.example.android.popcorn.activities.details.ReviewsLoader;
 import com.example.android.popcorn.activities.details.TMDbReviewsAdapter;
@@ -25,7 +27,11 @@ import com.example.android.popcorn.data.PopcornContract;
 import com.example.android.popcorn.data.json.TMDbMovie;
 import com.example.android.popcorn.data.json.TMDbSorting;
 import com.example.android.popcorn.data.sync.PopcornSyncInitializer;
+import com.example.android.popcorn.databinding.ActivityMovieDetailsBinding;
 import com.example.android.popcorn.utils.MovieIntents;
+import com.squareup.picasso.Picasso;
+
+import static com.example.android.popcorn.utils.DataUrlsHelper.getTMDbImageUri;
 
 public class MovieDetailsActivity extends AppCompatActivity implements TrailerClickedListener {
     private final static String TAG = MovieDetailsActivity.class.getSimpleName();
@@ -34,7 +40,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
     private int MOVIE_NOT_EXISTING = -1;
 
     private TMDbMovie tmDbMovie;
-    private MovieLoader mMovieLoader;
 
     private TMDbTrailersAdapter mTrailerAdapter;
     private RecyclerView mTrailerRecyclerView;
@@ -44,11 +49,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
     private RecyclerView mReviewsRecyclerView;
     private int mReviewsPosition;
 
+    private ActivityMovieDetailsBinding movieDetailsBinding;
+
+    private MovieInFavoritesLoader mFavoritesLoader;
+    private Boolean mIsFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        movieDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
         mTrailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
         final LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -79,18 +90,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
         movieLoader.setId(tmDbMovieId);
         getSupportLoaderManager().initLoader(MovieLoader.ID_MOVIE_LOADER_ID, null, movieLoader);
 
+        mFavoritesLoader = new DetailsFavoriteMovieLoader(this);
+        mFavoritesLoader.setId(tmDbMovieId);
+        getSupportLoaderManager().initLoader(MovieInFavoritesLoader.ID_FAVORITES_LOADER_ID, null, mFavoritesLoader);
+
         PopcornSyncInitializer.initializeReview(this, tmDbMovieId);
         PopcornSyncInitializer.initializeTrailer(this, tmDbMovieId);
-
-        loadMovie();
 
         hideTrailers();
         hideReviews();
     }
-
-    private void loadMovie() {
-    }
-
 
     private void hideTrailers() {
         mTrailerRecyclerView.setVisibility(View.INVISIBLE);
@@ -110,18 +119,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
 
     public void addMovieToFavorites(View view) {
         new AsyncTask<Void, Void, Void>(){
-
             @Override
             protected Void doInBackground(Void... params) {
                 ContentResolver popcornContentResolver = MovieDetailsActivity.this.getContentResolver();
-                ContentValues newFavorite = new ContentValues();
-                newFavorite.put(PopcornContract.MoviesEntry.SORTING, TMDbSorting.FAVORITE.toString());
-                newFavorite.put(PopcornContract.MoviesEntry._ID, tmDbMovieId);
-                newFavorite.put(PopcornContract.MoviesEntry.ORIGINAL_TITLE, tmDbMovieId);
+                if (mIsFavorite) {
+                   popcornContentResolver.delete(PopcornContract.MoviesEntry.CONTENT_URI,
+                           PopcornContract.MoviesEntry._ID + "=? AND " + PopcornContract.MoviesEntry.SORTING + "=?",
+                           new String[]{String.valueOf(tmDbMovieId), TMDbSorting.FAVORITE.toString()});
+                } else {
+                    final ContentValues newFavorite = new ContentValues();
+                    newFavorite.put(PopcornContract.MoviesEntry.SORTING, TMDbSorting.FAVORITE.toString());
+                    newFavorite.put(PopcornContract.MoviesEntry._ID, tmDbMovieId);
+                    newFavorite.put(PopcornContract.MoviesEntry.ORIGINAL_TITLE, tmDbMovie.getOriginalTitle());
+                    newFavorite.put(PopcornContract.MoviesEntry.OVERVIEW, tmDbMovie.getOverview());
+                    newFavorite.put(PopcornContract.MoviesEntry.POSTER_PATH, tmDbMovie.getPosterPath());
+                    newFavorite.put(PopcornContract.MoviesEntry.RELEASE_DATE, tmDbMovie.getReleaseDate());
+                    newFavorite.put(PopcornContract.MoviesEntry.VOTE_AVERAGE, tmDbMovie.getVoteAverage());
+                    newFavorite.put(PopcornContract.MoviesEntry.TITLE, tmDbMovie.getTitle());
+                    popcornContentResolver.insert(PopcornContract.MoviesEntry.CONTENT_URI, newFavorite);
+                }
 
-                newFavorite.put(PopcornContract.MoviesEntry._ID, tmDbMovieId);
-                popcornContentResolver.insert(PopcornContract.MoviesEntry.CONTENT_URI,
-                        newFavorite);
+                getSupportLoaderManager().restartLoader(MovieInFavoritesLoader.ID_FAVORITES_LOADER_ID, null, mFavoritesLoader);
                 return null;
             }
         }.execute();
@@ -150,7 +168,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
         }
     }
 
-    ;
 
     @Override
     public void onTrailerClicked(final String website, String trailerVideoKey) {
@@ -217,6 +234,38 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
     }
 
     private void bindMovieData() {
+        if (tmDbMovie != null) {
+            movieDetailsBinding.tvMovieTitle.setText(tmDbMovie.getOriginalTitle());
+            movieDetailsBinding.tvOverview.setText(tmDbMovie.getOverview());
+            movieDetailsBinding.iDetailHeader.tvRating.setText(String.valueOf(tmDbMovie.getVoteAverage()));
+            movieDetailsBinding.iDetailHeader.tvReleaseDate.setText(tmDbMovie.getReleaseDate());
+            Uri imageUri = getTMDbImageUri(tmDbMovie.getPosterPath());
+            Picasso.with(this).load(imageUri).into(movieDetailsBinding.iDetailHeader.ivThumbnail);
+        }
+        if (mIsFavorite != null){
+            if (mIsFavorite){
+                movieDetailsBinding.iDetailHeader.bMarkFavorite.setBackground(this.getResources().getDrawable(R.drawable.star_selected));
+            } else {
+                movieDetailsBinding.iDetailHeader.bMarkFavorite.setBackground(this.getResources().getDrawable(R.drawable.star_unselected));
+            }
+        }
+    }
 
+    private final class DetailsFavoriteMovieLoader extends MovieInFavoritesLoader {
+
+        public DetailsFavoriteMovieLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+            mIsFavorite = data;
+            bindMovieData();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Boolean> loader) {
+            mIsFavorite = null;
+        }
     }
 }

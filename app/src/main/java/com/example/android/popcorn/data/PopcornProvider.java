@@ -8,9 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 
 public class PopcornProvider extends ContentProvider {
+    private final static String TAG = PopcornProvider.class.getSimpleName();
 
     public static final int CODE_MOVIES = 100;
     public static final int CODE_MOVIES_WITH_ID = 101;
@@ -83,6 +85,7 @@ public class PopcornProvider extends ContentProvider {
             case CODE_MOVIES_WITH_SORTING: {
                 final String sorting = uri.getLastPathSegment();
                 final String[] selectionArguments = new String[]{sorting};
+                Log.d(TAG, "loading movies with sorting " + sorting);
                 cursor = mDbHelper.getReadableDatabase().query(
                         PopcornContract.MoviesEntry.TABLE_NAME,
                         projection,

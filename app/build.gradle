@@ -22,6 +22,8 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'THE_MOVIE_DB_API_TOKEN', theMovieDBApiToken
     }
+
+    dataBinding.enabled = true
 }
 
 repositories {

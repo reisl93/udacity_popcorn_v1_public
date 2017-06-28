@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:showIn="@layout/activity_movie_details">
-
-    <ImageView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/iv_thumbnail"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="@dimen/movie_details_space"
-        android:contentDescription="@string/movie_thumbnail"
-        android:scaleType="fitStart" />
-
-    <TextView
-        android:id="@+id/tv_release_date"
-        android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/movie_detail_startMargin"
-        android:layout_marginStart="@dimen/movie_detail_startMargin"
-        android:layout_marginTop="@dimen/movie_details_space"
-        android:textColor="@color/detail_accent_label"
-        android:textSize="@dimen/movie_caption_text_size"
-        app:layout_constraintLeft_toRightOf="@+id/iv_thumbnail"
-        app:layout_constraintTop_toTopOf="@+id/iv_thumbnail"
-        tools:text="2015" />
+        tools:showIn="@layout/activity_movie_details">
 
-    <TextView
-        android:id="@+id/tv_movie_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/movie_details_space"
-        android:textColor="@color/detail_accent_label"
-        android:textSize="@dimen/movie_caption_text_size"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_release_date"
-        tools:text="120min" />
+        <ImageView
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="@dimen/movie_details_space"
+            android:contentDescription="@string/movie_thumbnail"
+            android:scaleType="fitStart"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/movie_details_space"
-        android:textColor="@color/detail_accent_label"
-        android:textSize="@dimen/movie_caption_text_size"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_movie_length"
-        tools:text="8.1/10" />
+        <TextView
+            android:id="@+id/tv_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/movie_detail_startMargin"
+            android:layout_marginStart="@dimen/movie_detail_startMargin"
+            android:layout_marginTop="@dimen/movie_details_space"
+            android:textColor="@color/detail_accent_label"
+            android:textSize="@dimen/movie_caption_text_size"
+            app:layout_constraintLeft_toRightOf="@+id/iv_thumbnail"
+            app:layout_constraintTop_toTopOf="@+id/iv_thumbnail"
+            tools:text="2015" />
 
-    <Button
-        android:id="@+id/b_mark_favorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPrimaryLight"
-        android:text="@string/movie_detail_mark_as_favorite"
-        android:textColor="@color/detail_accent_label"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rating"
-        android:onClick="addMovieToFavorites"/>
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_movie_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/movie_details_space"
+            android:textColor="@color/detail_accent_label"
+            android:textSize="@dimen/movie_caption_text_size"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_release_date"
+            tools:text="120min" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/movie_details_space"
+            android:textColor="@color/detail_accent_label"
+            android:textSize="@dimen/movie_caption_text_size"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_length"
+            tools:text="8.1/10" />
+
+        <Button
+            android:id="@+id/b_mark_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/star_unselected"
+            android:onClick="addMovieToFavorites"
+            android:textColor="@color/detail_accent_label"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rating" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -5,23 +5,26 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.example.android.popcorn.data.json.TMDbSorting;
+
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PopcornSyncInitializer {
-    private static boolean sInitialized;
+    private static Map<TMDbSorting, Boolean> sInitializedMovies = new EnumMap<TMDbSorting, Boolean>(TMDbSorting.class);
     private static Map<Integer, Boolean> sInitializedTrailers = new HashMap<>();
     private static Map<Integer, Boolean> sInitializedReviews = new HashMap<>();
 
-    synchronized public static void initialize(@NonNull final Context context) {
+    synchronized public static void initializeMovies(@NonNull final Context context, final TMDbSorting sorting) {
 
-        if (sInitialized) return;
-        sInitialized = true;
+        if (sInitializedMovies.containsKey(sorting) && sInitializedMovies.get(sorting)) return;
+        sInitializedMovies.put(sorting, true);
 
         new AsyncTask<Void, Void, Void>() {
             @Override
             public Void doInBackground( Void... voids ) {
-                startImmediateSync(context, PopcornSyncIntentService.POPCORN_SYNC_MOVIES);
+                startImmediateSync(context, PopcornSyncIntentService.POPCORN_SYNC_MOVIES, sorting);
                 return null;
             }
         }.execute();
@@ -56,9 +59,10 @@ public class PopcornSyncInitializer {
     }
 
 
-    public static void startImmediateSync(@NonNull final Context context, final String sync_action) {
+    public static void startImmediateSync(@NonNull final Context context, final String sync_action, TMDbSorting sorting) {
         Intent intentToSyncImmediately = new Intent(context, PopcornSyncIntentService.class);
         intentToSyncImmediately.setAction(sync_action);
+        intentToSyncImmediately.putExtra(PopcornSyncIntentService.POPCORN_SYNC_SORTING_KEY, sorting.toString());
         context.startService(intentToSyncImmediately);
     }
 

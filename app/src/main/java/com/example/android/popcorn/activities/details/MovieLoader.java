@@ -20,13 +20,15 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<TMDbM
             PopcornContract.MoviesEntry.RELEASE_DATE,
             PopcornContract.MoviesEntry.VOTE_AVERAGE,
             PopcornContract.MoviesEntry.TITLE,
-            PopcornContract.MoviesEntry.OVERVIEW
+            PopcornContract.MoviesEntry.OVERVIEW,
+            PopcornContract.MoviesEntry.POSTER_PATH
     };
 
     static final int INDEX_MOVIE_RELEASE_DATE = 0;
     static final int INDEX_MOVIE_VOTE_AVERAGE = 1;
     static final int INDEX_MOVIE_TITLE = 2;
     static final int INDEX_MOVIE_OVERVIEW = 3;
+    static final int INDEX_MOVIE_POSTER_PATH = 4;
 
     private final Context mContext;
 
@@ -64,7 +66,7 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<TMDbM
                             return new TMDbMovie(
                                     movie.getString(INDEX_MOVIE_TITLE),
                                     mId,
-                                    null,
+                                    movie.getString(INDEX_MOVIE_POSTER_PATH),
                                     movie.getString(INDEX_MOVIE_OVERVIEW),
                                     movie.getString(INDEX_MOVIE_TITLE),
                                     movie.getDouble(INDEX_MOVIE_VOTE_AVERAGE),

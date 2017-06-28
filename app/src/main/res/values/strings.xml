@@ -11,8 +11,6 @@
     <string name="rating">Rating: </string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
     <string name="trailers">Trailers:</string>
-    <string name="movie_detail_mark_as_favorite">mark as favorite</string>
-
 
     <string name="content_authority">com.example.android.popcorn</string>
     <string name="play_button">Play button</string>

@@ -18,11 +18,7 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Curso
 
     public static final String[] MAIN_MOVIES_PROJECTION = {
             PopcornContract.MoviesEntry._ID,
-            PopcornContract.MoviesEntry.ORIGINAL_TITLE,
-            PopcornContract.MoviesEntry.SORTING,
-            PopcornContract.MoviesEntry.POSTER_PATH,
-            PopcornContract.MoviesEntry.RELEASE_DATE,
-            PopcornContract.MoviesEntry.VOTE_AVERAGE};
+            PopcornContract.MoviesEntry.POSTER_PATH};
 
     /*
      * We store the indices of the values in the array of Strings above to more quickly be able to
@@ -30,11 +26,7 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Curso
      * must be adjusted to match the order of the Strings.
      */
     public static final int INDEX_MOVIE_ID = 0;
-    public static final int INDEX_MOVIE_ORIGINAL_TITLE = 1;
-    public static final int INDEX_MOVIE_SORTING = 2;
-    public static final int INDEX_MOVIE_POSTER_PATH = 3;
-    public static final int INDEX_MOVIE_RELEASE_DATE = 4;
-    public static final int INDEX_MOVIE_VOTE_AVERAGE = 5;
+    public static final int INDEX_MOVIE_POSTER_PATH = 1;
 
     private TMDbSorting mSorting = TMDbSorting.POPULAR;
 
