@@ -4,4 +4,22 @@
     <style name="DetailsHeadline">
         <item name="android:layout_marginStart">@dimen/movie_detail_startMargin</item>
     </style>
+
+    <style name="DetailsLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/movie_normal_text_size</item>
+        <item name="android:layout_marginEnd">@dimen/movie_detail_horizontal_padding</item>
+        <item name="android:layout_marginStart">@dimen/movie_detail_horizontal_padding</item>
+    </style>
+
+    <style name="SmallSeparator">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginEnd">@dimen/movie_detail_horizontal_padding</item>
+        <item name="android:layout_marginStart">@dimen/movie_detail_horizontal_padding</item>
+        <item name="android:layout_marginTop">@dimen/movie_details_space</item>
+        <!--suppress CheckTagEmptyBody - on purpose for things we don't want a description -->
+        <item name="android:contentDescription"></item>
+    </style>
 </resources>

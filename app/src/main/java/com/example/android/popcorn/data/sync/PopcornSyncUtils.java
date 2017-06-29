@@ -8,7 +8,7 @@ import com.example.android.popcorn.data.json.TMDbReview;
 import com.example.android.popcorn.data.json.TMDbSorting;
 import com.example.android.popcorn.data.json.TMDbTrailer;
 
-public class PopcornSyncUtils {
+class PopcornSyncUtils {
     static ContentValues[] getMoviesContentValues(TMDbSorting sorting, TMDbMovie[] tmDbMovies) {
         ContentValues[] contentValues = new ContentValues[tmDbMovies.length];
         for (int i = 0; i < tmDbMovies.length; i++) {
@@ -28,7 +28,7 @@ public class PopcornSyncUtils {
         return contentValues;
     }
 
-    public static ContentValues[] getTrailersContentValues(int id, TMDbTrailer[] trailers) {
+    static ContentValues[] getTrailersContentValues(int id, TMDbTrailer[] trailers) {
         ContentValues[] contentValues = new ContentValues[trailers.length];
         for (int i = 0; i < trailers.length; i++) {
             final TMDbTrailer tmDbTrailer = trailers[i];
@@ -43,7 +43,7 @@ public class PopcornSyncUtils {
         return contentValues;
     }
 
-    public static ContentValues[] getReviewsContentValues(int id, TMDbReview[] reviews) {
+    static ContentValues[] getReviewsContentValues(int id, TMDbReview[] reviews) {
         ContentValues[] contentValues = new ContentValues[reviews.length];
         for (int i = 0; i < reviews.length; i++) {
             final TMDbReview tmDbReview = reviews[i];

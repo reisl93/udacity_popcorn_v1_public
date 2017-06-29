@@ -24,11 +24,11 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<TMDbM
             PopcornContract.MoviesEntry.POSTER_PATH
     };
 
-    static final int INDEX_MOVIE_RELEASE_DATE = 0;
-    static final int INDEX_MOVIE_VOTE_AVERAGE = 1;
-    static final int INDEX_MOVIE_TITLE = 2;
-    static final int INDEX_MOVIE_OVERVIEW = 3;
-    static final int INDEX_MOVIE_POSTER_PATH = 4;
+    private static final int INDEX_MOVIE_RELEASE_DATE = 0;
+    private static final int INDEX_MOVIE_VOTE_AVERAGE = 1;
+    private static final int INDEX_MOVIE_TITLE = 2;
+    private static final int INDEX_MOVIE_OVERVIEW = 3;
+    private static final int INDEX_MOVIE_POSTER_PATH = 4;
 
     private final Context mContext;
 

@@ -16,11 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.example.android.popcorn.data.json.TMDbSorting;
-import com.example.android.popcorn.data.sync.PopcornSyncInitializer;
 import com.example.android.popcorn.activities.posters.MovieClickedListener;
 import com.example.android.popcorn.activities.posters.MovieLoader;
 import com.example.android.popcorn.activities.posters.TMDbMoviesAdapter;
+import com.example.android.popcorn.data.json.TMDbSorting;
+import com.example.android.popcorn.data.sync.PopcornSyncInitializer;
+import com.example.android.popcorn.utils.PreferencesUtils;
 
 import static com.example.android.popcorn.utils.MovieIntents.VIEW_MOVIE_DETAILS;
 
@@ -59,6 +60,7 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
 
         showLoading();
 
+        mMoviesSorting = PreferencesUtils.getLastUsedSorting(this);
         PopcornSyncInitializer.initializeMovies(this, mMoviesSorting);
     }
 
@@ -106,7 +108,9 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
     }
 
     private void reloadMoviesToSorting(TMDbSorting sorting) {
+        Log.d(TAG, "movies sorted to new sorting: " + sorting);
         mMoviesSorting = sorting;
+        PreferencesUtils.setLastUsedSorting(this, sorting);
         mMoviesLoader.setSorting(mMoviesSorting);
         getSupportLoaderManager().restartLoader(MovieLoader.ID_MOVIES_LOADER, null, mMoviesLoader);
     }
@@ -118,8 +122,8 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
         startActivity(intentToStartDetailActivity);
     }
 
-    final class PostersMovieLoader extends MovieLoader {
-        public PostersMovieLoader(Context context) {
+    private final class PostersMovieLoader extends MovieLoader {
+        PostersMovieLoader(Context context) {
             super(context);
         }
 
@@ -137,6 +141,5 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
         public void onLoaderReset(Loader<Cursor> loader) {
             mTmDbMoviesAdapter.swapCursor(null);
         }
-    };
-
+    }
 }

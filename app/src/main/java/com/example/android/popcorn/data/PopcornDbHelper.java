@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import static com.example.android.popcorn.data.PopcornContract.*;
 
+@SuppressWarnings("WeakerAccess")
 public class PopcornDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "popcorn.db";

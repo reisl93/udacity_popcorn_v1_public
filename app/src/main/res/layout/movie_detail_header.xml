@@ -10,7 +10,7 @@
         <ImageView
             android:id="@+id/iv_thumbnail"
             android:layout_width="100dp"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/movie_detail_thumbnailSize"
             android:layout_marginTop="@dimen/movie_details_space"
             android:contentDescription="@string/movie_thumbnail"
             android:scaleType="fitStart"
@@ -31,17 +31,6 @@
             tools:text="2015" />
 
         <TextView
-            android:id="@+id/tv_movie_length"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/movie_details_space"
-            android:textColor="@color/detail_accent_label"
-            android:textSize="@dimen/movie_caption_text_size"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_release_date"
-            tools:text="120min" />
-
-        <TextView
             android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +38,7 @@
             android:textColor="@color/detail_accent_label"
             android:textSize="@dimen/movie_caption_text_size"
             app:layout_constraintLeft_toLeftOf="@+id/tv_release_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_movie_length"
+            app:layout_constraintTop_toBottomOf="@+id/tv_release_date"
             tools:text="8.1/10" />
 
         <Button

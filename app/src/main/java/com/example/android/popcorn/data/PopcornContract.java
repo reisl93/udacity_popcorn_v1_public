@@ -3,6 +3,7 @@ package com.example.android.popcorn.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+@SuppressWarnings("WeakerAccess")
 public class PopcornContract {
 
     public static final String CONTENT_AUTHORITY = "com.example.android.popcorn";

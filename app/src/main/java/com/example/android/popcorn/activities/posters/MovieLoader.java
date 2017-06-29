@@ -16,7 +16,7 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Curso
     private final Context mContext;
 
 
-    public static final String[] MAIN_MOVIES_PROJECTION = {
+    private static final String[] MAIN_MOVIES_PROJECTION = {
             PopcornContract.MoviesEntry._ID,
             PopcornContract.MoviesEntry.POSTER_PATH};
 
@@ -25,8 +25,8 @@ public abstract class MovieLoader implements LoaderManager.LoaderCallbacks<Curso
      * access the data from our query. If the order of the Strings above changes, these indices
      * must be adjusted to match the order of the Strings.
      */
-    public static final int INDEX_MOVIE_ID = 0;
-    public static final int INDEX_MOVIE_POSTER_PATH = 1;
+    static final int INDEX_MOVIE_ID = 0;
+    static final int INDEX_MOVIE_POSTER_PATH = 1;
 
     private TMDbSorting mSorting = TMDbSorting.POPULAR;
 

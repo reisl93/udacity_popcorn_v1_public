@@ -7,14 +7,14 @@
     <string name="action_favorite">FAVORITE</string>
 
     <!-- DETAILS ACTION RESOURCES -->
-    <string name="release_date">Release date: </string>
-    <string name="rating">Rating: </string>
     <string name="movie_thumbnail">Movie Thumbnail</string>
-    <string name="trailers">Trailers:</string>
+    <string name="trailers">Trailers</string>
 
     <string name="content_authority">com.example.android.popcorn</string>
     <string name="play_button">Play button</string>
-    <string name="reviews">Reviews:</string>
+    <string name="reviews">Reviews</string>
     <string name="noDescription" />
+    <string name="review_image_description">review</string>
+    <string name="movie_voting_max">%1$s/10</string>
 
 </resources>

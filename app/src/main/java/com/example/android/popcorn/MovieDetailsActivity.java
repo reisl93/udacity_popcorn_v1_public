@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.example.android.popcorn.data.json.TMDbMovie;
 import com.example.android.popcorn.data.json.TMDbSorting;
 import com.example.android.popcorn.data.sync.PopcornSyncInitializer;
 import com.example.android.popcorn.databinding.ActivityMovieDetailsBinding;
+import com.example.android.popcorn.utils.ApiUtils;
 import com.example.android.popcorn.utils.MovieIntents;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +39,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
     private final static String TAG = MovieDetailsActivity.class.getSimpleName();
 
     private int tmDbMovieId;
-    private int MOVIE_NOT_EXISTING = -1;
 
     private TMDbMovie tmDbMovie;
 
@@ -75,6 +76,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
 
         Intent calledByIntent = getIntent();
         if (calledByIntent.hasExtra(MovieIntents.VIEW_MOVIE_DETAILS)) {
+            int MOVIE_NOT_EXISTING = -1;
             tmDbMovieId = calledByIntent.getIntExtra(MovieIntents.VIEW_MOVIE_DETAILS, MOVIE_NOT_EXISTING);
         }
 
@@ -237,17 +239,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
         if (tmDbMovie != null) {
             movieDetailsBinding.tvMovieTitle.setText(tmDbMovie.getOriginalTitle());
             movieDetailsBinding.tvOverview.setText(tmDbMovie.getOverview());
-            movieDetailsBinding.iDetailHeader.tvRating.setText(String.valueOf(tmDbMovie.getVoteAverage()));
+            movieDetailsBinding.iDetailHeader.tvRating.setText(getString(R.string.movie_voting_max, String.valueOf(tmDbMovie.getVoteAverage())));
             movieDetailsBinding.iDetailHeader.tvReleaseDate.setText(tmDbMovie.getReleaseDate());
             Uri imageUri = getTMDbImageUri(tmDbMovie.getPosterPath());
             Picasso.with(this).load(imageUri).into(movieDetailsBinding.iDetailHeader.ivThumbnail);
         }
         if (mIsFavorite != null){
+            final Drawable drawable;
             if (mIsFavorite){
-                movieDetailsBinding.iDetailHeader.bMarkFavorite.setBackground(this.getResources().getDrawable(R.drawable.star_selected));
+                drawable = ApiUtils.getDrawableApiSave(this, R.drawable.star_selected);
             } else {
-                movieDetailsBinding.iDetailHeader.bMarkFavorite.setBackground(this.getResources().getDrawable(R.drawable.star_unselected));
+                drawable = ApiUtils.getDrawableApiSave(this, R.drawable.star_unselected);
             }
+            movieDetailsBinding.iDetailHeader.bMarkFavorite.setBackground(drawable);
         }
     }
 

@@ -19,14 +19,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
-public class PopcornSyncTask {
+class PopcornSyncTask {
 
     private static final String TAG = PopcornSyncTask.class.getSimpleName();
 
-    synchronized public static void syncMovies(Context context, TMDbSorting sorting) {
+    synchronized static void syncMovies(Context context, TMDbSorting sorting) {
 
         TMDbMovie[] tmDbMovies = null;
 

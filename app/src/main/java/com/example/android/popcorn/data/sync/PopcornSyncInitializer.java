@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PopcornSyncInitializer {
-    private static Map<TMDbSorting, Boolean> sInitializedMovies = new EnumMap<TMDbSorting, Boolean>(TMDbSorting.class);
-    private static Map<Integer, Boolean> sInitializedTrailers = new HashMap<>();
-    private static Map<Integer, Boolean> sInitializedReviews = new HashMap<>();
+    private final static Map<TMDbSorting, Boolean> sInitializedMovies = new EnumMap<>(TMDbSorting.class);
+    private final static Map<Integer, Boolean> sInitializedTrailers = new HashMap<>();
+    private final static Map<Integer, Boolean> sInitializedReviews = new HashMap<>();
 
     synchronized public static void initializeMovies(@NonNull final Context context, final TMDbSorting sorting) {
 
@@ -59,14 +59,14 @@ public class PopcornSyncInitializer {
     }
 
 
-    public static void startImmediateSync(@NonNull final Context context, final String sync_action, TMDbSorting sorting) {
+    private static void startImmediateSync(@NonNull final Context context, final String sync_action, TMDbSorting sorting) {
         Intent intentToSyncImmediately = new Intent(context, PopcornSyncIntentService.class);
         intentToSyncImmediately.setAction(sync_action);
         intentToSyncImmediately.putExtra(PopcornSyncIntentService.POPCORN_SYNC_SORTING_KEY, sorting.toString());
         context.startService(intentToSyncImmediately);
     }
 
-    public static void startImmediateSyncWithId(@NonNull final Context context, final String sync_action, final int id) {
+    private static void startImmediateSyncWithId(@NonNull final Context context, final String sync_action, final int id) {
         Intent intentToSyncImmediately = new Intent(context, PopcornSyncIntentService.class);
         intentToSyncImmediately.setAction(sync_action);
         intentToSyncImmediately.putExtra(PopcornSyncIntentService.POPCORN_SYNC_ID_KEY, id);
