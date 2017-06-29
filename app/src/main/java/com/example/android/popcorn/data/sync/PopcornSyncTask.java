@@ -45,9 +45,8 @@ class PopcornSyncTask {
             }
         }
 
-        ContentValues[] movieValues = PopcornSyncUtils.getMoviesContentValues(sorting, tmDbMovies);
-
-        if (movieValues.length > 0) {
+        if (tmDbMovies != null && tmDbMovies.length > 0) {
+            ContentValues[] movieValues = PopcornSyncUtils.getMoviesContentValues(sorting, tmDbMovies);
             ContentResolver popcornContentResolver = context.getContentResolver();
             //delete all except his favorites
             popcornContentResolver.delete(
@@ -55,6 +54,7 @@ class PopcornSyncTask {
                     PopcornContract.MoviesEntry.SORTING + " = ?",
                     new String[]{sorting.toString()});
             popcornContentResolver.bulkInsert(PopcornContract.MoviesEntry.CONTENT_URI, movieValues);
+
         }
     }
 
@@ -79,10 +79,9 @@ class PopcornSyncTask {
             }
         }
 
-        ContentValues[] trailersValues = PopcornSyncUtils.getTrailersContentValues(id, trailers);
-
-        if (trailersValues.length > 0) {
+        if (trailers != null && trailers.length > 0) {
             ContentResolver popcornContentResolver = context.getContentResolver();
+            ContentValues[] trailersValues = PopcornSyncUtils.getTrailersContentValues(id, trailers);
 
             popcornContentResolver.delete(PopcornContract.TrailersEntry.CONTENT_URI, PopcornContract.TrailersEntry._ID + "=?", new String[]{String.valueOf(id)});
             popcornContentResolver.bulkInsert(PopcornContract.TrailersEntry.CONTENT_URI, trailersValues);
@@ -110,9 +109,9 @@ class PopcornSyncTask {
             }
         }
 
-        ContentValues[] reviewValues = PopcornSyncUtils.getReviewsContentValues(id, reviews);
 
-        if (reviewValues.length > 0) {
+        if (reviews != null && reviews.length > 0) {
+            ContentValues[] reviewValues = PopcornSyncUtils.getReviewsContentValues(id, reviews);
             ContentResolver popcornContentResolver = context.getContentResolver();
 
             popcornContentResolver.delete(PopcornContract.ReviewsEntry.CONTENT_URI, PopcornContract.ReviewsEntry._ID + "=?", new String[]{String.valueOf(id)});

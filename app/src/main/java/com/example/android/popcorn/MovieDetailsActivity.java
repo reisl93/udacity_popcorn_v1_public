@@ -43,11 +43,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
     private TMDbMovie tmDbMovie;
 
     private TMDbTrailersAdapter mTrailerAdapter;
-    private RecyclerView mTrailerRecyclerView;
+    RecyclerView mTrailerRecyclerView;
     private int mTrailerPosition;
 
     private TMDbReviewsAdapter mReviewsAdapter;
-    private RecyclerView mReviewsRecyclerView;
+    RecyclerView mReviewsRecyclerView;
     private int mReviewsPosition;
 
     private ActivityMovieDetailsBinding movieDetailsBinding;
@@ -62,14 +62,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerCl
 
         movieDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
-        mTrailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
         final LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mTrailerRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
         mTrailerRecyclerView.setLayoutManager(trailerLayoutManager);
         mTrailerAdapter = new TMDbTrailersAdapter(this);
         mTrailerRecyclerView.setAdapter(mTrailerAdapter);
 
-        mReviewsRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
         final LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mReviewsRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
         mReviewsRecyclerView.setLayoutManager(reviewLayoutManager);
         mReviewsAdapter = new TMDbReviewsAdapter();
         mReviewsRecyclerView.setAdapter(mReviewsAdapter);

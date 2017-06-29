@@ -55,12 +55,14 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
         mMoviesRecyclerView.setHasFixedSize(true);
         mMoviesRecyclerView.setAdapter(mTmDbMoviesAdapter);
 
+        mMoviesSorting = PreferencesUtils.getLastUsedSorting(this);
+
         mMoviesLoader = new PostersMovieLoader(this);
+        mMoviesLoader.setSorting(mMoviesSorting);
         getSupportLoaderManager().initLoader(MovieLoader.ID_MOVIES_LOADER, null, mMoviesLoader);
 
         showLoading();
 
-        mMoviesSorting = PreferencesUtils.getLastUsedSorting(this);
         PopcornSyncInitializer.initializeMovies(this, mMoviesSorting);
     }
 
@@ -133,8 +135,8 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
                 mTmDbMoviesAdapter.swapCursor(data);
                 if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
                 mMoviesRecyclerView.smoothScrollToPosition(mPosition);
-                if (data.getCount() != 0) showMovies();
             }
+            showMovies();
         }
 
         @Override
