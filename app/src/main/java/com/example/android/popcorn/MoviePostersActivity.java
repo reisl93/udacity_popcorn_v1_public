@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,8 +26,9 @@ import com.example.android.popcorn.utils.PreferencesUtils;
 
 import static com.example.android.popcorn.utils.MovieIntents.VIEW_MOVIE_DETAILS;
 
-public class MoviePostersActivity extends AppCompatActivity implements MovieClickedListener{
+public class MoviePostersActivity extends AppCompatActivity implements MovieClickedListener {
     private static final String TAG = MoviePostersActivity.class.getSimpleName();
+    private static final String POSTER_POSITION_KEY = "POSTER_POSITION_KEY";
 
     private TMDbMoviesAdapter mTmDbMoviesAdapter;
     private RecyclerView mMoviesRecyclerView;
@@ -40,6 +42,11 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_posters);
+
+        /*if (savedInstanceState != null && savedInstanceState.containsKey(POSTER_POSITION_KEY)) {
+            mPosition = savedInstanceState.getInt(POSTER_POSITION_KEY);
+            Log.d(TAG, "onCreate: setting position to " + mPosition);
+        }*/
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
@@ -111,6 +118,7 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
 
     private void reloadMoviesToSorting(TMDbSorting sorting) {
         Log.d(TAG, "movies sorted to new sorting: " + sorting);
+        mPosition = 0;
         mMoviesSorting = sorting;
         PreferencesUtils.setLastUsedSorting(this, sorting);
         mMoviesLoader.setSorting(mMoviesSorting);
@@ -133,8 +141,13 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null) {
                 mTmDbMoviesAdapter.swapCursor(data);
-                if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-                mMoviesRecyclerView.smoothScrollToPosition(mPosition);
+                /*if (mPosition == RecyclerView.NO_POSITION) {
+                    Log.d(TAG, "mPosition not set, setting to 0");
+                    mPosition = 0;
+                }
+                showMovies();
+                Log.d(TAG, "onLoadFinished: scrolling to position " + mPosition);
+                mMoviesRecyclerView.smoothScrollToPosition(mPosition);*/
             }
             showMovies();
         }
@@ -143,5 +156,34 @@ public class MoviePostersActivity extends AppCompatActivity implements MovieClic
         public void onLoaderReset(Loader<Cursor> loader) {
             mTmDbMoviesAdapter.swapCursor(null);
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(POSTER_POSITION_KEY)) {
+            mPosition = savedInstanceState.getInt(POSTER_POSITION_KEY);
+            // because the images take time to load, we need to scroll delayed
+            Log.d(TAG, "onRestoreInstanceState: scrolling to position " + mPosition);
+            mMoviesRecyclerView.smoothScrollToPosition(mPosition);
+            /*final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            }, 3000);*/
+            // ((GridLayoutManager) mMoviesRecyclerView.getLayoutManager()).scrollToPosition(mPosition);
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        mPosition = ((GridLayoutManager) mMoviesRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        Log.d(TAG, "onSaveInstanceState: saving mPosition to " + mPosition);
+        outState.putInt(POSTER_POSITION_KEY, mPosition);
+
+        super.onSaveInstanceState(outState);
     }
 }
